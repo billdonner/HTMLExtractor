@@ -21,25 +21,17 @@ public enum Linktype {
     case hyperlink
 }
 public struct LinkElement  {
-    let title: String
-    let href: URL?
-    let linktype: Linktype
+    private(set) var  title: String
+    private(set) var  href: URL?
+    private(set) var  linktype: Linktype
     
-    var urlstr: String {
-        if let url = href {
-            return url.absoluteString
-        }
-        else {
-            return "bad url"
-        }
-    }
     // when a LinkElement is creted, it tries to make a url from the supplied string
     public init(title:String,href:String,linktype:Linktype,relativeTo:URL?) {
         self.title = title; self.href=URL(string:href,relativeTo:relativeTo); self.linktype=linktype
     }
 }
 public struct ExtractedFromHTML {
-   public struct Link {
+    public struct Link {
         let href : String
         let contents : String
     }
@@ -107,48 +99,48 @@ fileprivate extension String {
 
 
 extension HTMLExtractor {
-static func generalScrapeAndAbsorb (theURL:URL, html:String ) throws -> ScrapeAndAbsorbBlock {
-    
-    var encounterdLinks:[LinkElement]=[]
-    
-    func absorbLink(href:String? , txt:String? ,relativeTo: URL?, tag: String )  {
-        if let lk = href, //link["href"] ,
-            let url = URL(string:lk,relativeTo:relativeTo) {
-            let linktype = Linktype.hyperlink
-        //processExtension(lgFuncs: lgFuncs, url:url, relativeTo: relativeTo) {
-            
-            // strip exension if any off the title
-            let parts = (txt ?? "fail").components(separatedBy: ".")
-            if let ext  = parts.last,  let front = parts.first , ext.count > 0
-            {
-                let subparts = front.components(separatedBy: "-")
-                if let titl = subparts.last {
-                    let titw =  titl.trimmingCharacters(in: .whitespacesAndNewlines)
-                    encounterdLinks.append(LinkElement(title:titw,href:url.absoluteString,linktype:linktype, relativeTo: relativeTo))
-                }
-            } else {
-                // this is what happens upstream
-                if  let txt  = txt  {  encounterdLinks.append(LinkElement(title:txt,href:url.absoluteString,linktype:linktype, relativeTo: relativeTo))
+    static func generalScrapeAndAbsorb (theURL:URL, html:String ) throws -> ScrapeAndAbsorbBlock {
+        
+        var encounterdLinks:[LinkElement]=[]
+        
+        func absorbLink(href:String? , txt:String? ,relativeTo: URL?, tag: String )  {
+            if let lk = href, //link["href"] ,
+                let url = URL(string:lk,relativeTo:relativeTo) {
+                let linktype = Linktype.hyperlink
+                //processExtension(lgFuncs: lgFuncs, url:url, relativeTo: relativeTo) {
+                
+                // strip exension if any off the title
+                let parts = (txt ?? "fail").components(separatedBy: ".")
+                if let ext  = parts.last,  let front = parts.first , ext.count > 0
+                {
+                    let subparts = front.components(separatedBy: "-")
+                    if let titl = subparts.last {
+                        let titw =  titl.trimmingCharacters(in: .whitespacesAndNewlines)
+                        encounterdLinks.append(LinkElement(title:titw,href:url.absoluteString,linktype:linktype, relativeTo: relativeTo))
+                    }
+                } else {
+                    // this is what happens upstream
+                    if  let txt  = txt  {  encounterdLinks.append(LinkElement(title:txt,href:url.absoluteString,linktype:linktype, relativeTo: relativeTo))
+                    }
                 }
             }
-        }
-    }// end of absorbLink
-    var maintitle = ""
-
-    
-    func setupWithout() throws {
-        let z = HTMLExtractor.extractFrom(html:    html)
-        maintitle = z.title
+        }// end of absorbLink
+        var maintitle = ""
         
-        for link in z.links {
-            absorbLink(href:link.href,
-                       txt: link.contents,
-                       relativeTo:theURL,
-                       tag: "media")
+        
+        func setupWithout() throws {
+            let z = HTMLExtractor.extractFrom(html:    html)
+            maintitle = z.title
+            
+            for link in z.links {
+                absorbLink(href:link.href,
+                           txt: link.contents,
+                           relativeTo:theURL,
+                           tag: "media")
+            }
         }
+        
+        try setupWithout()//setupWithKanna()//setupWithout()
+        return ScrapeAndAbsorbBlock(title:  maintitle, links: encounterdLinks)
     }
-    
-    try setupWithout()//setupWithKanna()//setupWithout()
-    return ScrapeAndAbsorbBlock(title:  maintitle, links: encounterdLinks)
-}
 }

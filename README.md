@@ -1,5 +1,7 @@
 # HTMLExtractor
-0.1.0
+0.1.1
+
+A Swift PM Package
 
 Extracts title and links from an HTML String
 
