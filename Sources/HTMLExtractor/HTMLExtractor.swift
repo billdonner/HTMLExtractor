@@ -53,7 +53,8 @@ open class HTMLExtractor {
     }
 }
 extension HTMLExtractor {
-    public func converttoScrapeAndAbsorbBlock(_ x:ExtractedFromHTML,relativeTo:URL?) -> ScrapeAndAbsorbBlock {
+    //this function needs a testcase
+    public static func converttoScrapeAndAbsorbBlock(_ x:ExtractedFromHTML,relativeTo:URL?) -> ScrapeAndAbsorbBlock {
         var linkelements:[LinkElement] = []
         for y in x.links {
             linkelements.append(LinkElement(title: y.contents, href: y.href, linktype: .hyperlink, relativeTo: relativeTo))
