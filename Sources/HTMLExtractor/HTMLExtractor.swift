@@ -21,9 +21,9 @@ public enum Linktype {
     case hyperlink
 }
 public struct LinkElement  {
-    private(set) var  title: String
-    private(set) var  href: URL?
-    private(set) var  linktype: Linktype
+  public var  title: String
+   public   var  href: URL?
+  public  var  linktype: Linktype
     
     // when a LinkElement is creted, it tries to make a url from the supplied string
     public init(title:String,href:String,linktype:Linktype,relativeTo:URL?) {
