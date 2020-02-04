@@ -1,3 +1,6 @@
 # HTMLExtractor
+0.1.0
 
-A description of this package.
+Extracts title and links from an HTML String
+
+I selfishly use  this package as a replacement for Kanna in my apps.
