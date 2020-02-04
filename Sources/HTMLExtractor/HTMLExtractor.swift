@@ -108,7 +108,7 @@ fileprivate extension String {
 
 
 extension HTMLExtractor {
-    static func generalScrapeAndAbsorb (theURL:URL, html:String ) throws -> ScrapeAndAbsorbBlock {
+    static public func generalScrapeAndAbsorb (theURL:URL, html:String ) throws -> ScrapeAndAbsorbBlock {
         
         var encounterdLinks:[LinkElement]=[]
         
