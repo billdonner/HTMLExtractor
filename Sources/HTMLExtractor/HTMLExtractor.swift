@@ -38,7 +38,7 @@ public struct ExtractedFromHTML {
     let title: String
     let links: [Link]
 }
-public struct ScrapeAndAbsorbBlock {
+open class ScrapeAndAbsorbBlock {
     public var title: String
     public var links:[LinkElement]
     public init(title:String,links:[LinkElement]){
